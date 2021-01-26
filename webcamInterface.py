@@ -7,7 +7,8 @@ import logging
 from astral import LocationInfo
 from astral.sun import sun
 
-logging.basicConfig(filename="/home/pi/picam/webcamLogger.log", format='%(asctime)s: %(levelname)s: %(message)s', level=logging.WARNING)
+logging.basicConfig(filename="/home/pi/picam/webcamLogger.log", \
+	format='%(asctime)s: %(levelname)s: %(message)s', level=logging.INFO)
 
 localTime=time.localtime()
 
@@ -22,16 +23,24 @@ logging.debug(f'Dusk:    {s["dusk"]}')
 if (localTime.tm_hour > s["dawn"].hour) and \
 	(localTime.tm_hour < s["dusk"].hour):
 
-	imageName=str(localTime.tm_year) + "-" + str(localTime.tm_mon) + "-" + str(localTime.tm_mday) + "_" \
-		+ str(localTime.tm_hour) + ":" + str(localTime.tm_min) + "_WebCamFr34.jpeg"
+	min=("{:0>2d}".format(localTime.tm_min));
+	hour=("{:0>2d}".format(localTime.tm_hour));
+	day=("{:0>2d}".format(localTime.tm_mday));
+	month=("{:0>2d}".format(localTime.tm_mon));
+
+	imageName=str(localTime.tm_year) + "-" + str(month) + "-" + str(day) + "_" \
+		+ str(hour) + ":" + str(min) + "_WebCamFr34.jpeg"
 
 	logging.info("we are between dusk and dawn")
 	logging.info("taking a pic named: " + imageName)
+	print("we are between dusk and dawn")
+	print("taking a pic named: " + imageName)
 	#create object for PiCamera class
 	camera = picamera.PiCamera()
 	#set resolution
 	camera.resolution = (1024, 768)
 	camera.brightness = 60
+	camera.rotation = 180
 	#camera.start_preview()
 	#add text on image
 	#camera.annotate_text = 'Hi Pi User'
